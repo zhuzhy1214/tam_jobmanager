@@ -116,6 +116,13 @@ def new_post():
     return render_template('create_post.html', title='New Post', form=form)
 
 
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', title=post.title, post=post)
+
+
+
 from flask import jsonify
 @app.route("/api", methods=['GET'])
 def sample():
