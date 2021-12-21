@@ -2,10 +2,13 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from flaskblog import app, db, bcrypt, mail
+from flaskblog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
+                             PostForm, RequestResetForm, PasswordResetForm)
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
+
 
 @app.route("/")
 @app.route("/home")
@@ -164,6 +167,50 @@ def delete_post(post_id):
     db.session.commit()
     flash('The post has been deleted!', 'success')
     return redirect(url_for('home'))
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request',
+                  sender='amhq@dot.ca.gov',
+                  recipients=[user.email])
+    msg.body = '''To reset your password, visit the following link:{}
+    '''.format(url_for('reset_token', token=token, _external=True))
+    mail.send(msg)
+
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email with password reset link has been sent to your email. The link will expire after 30 minutes.',
+              'info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated: #if the user is already login, go to home page
+        return redirect(url_for('home'))
+
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('The token is invalid/expired', 'warning')
+        return redirect(url_for('reset_request'))
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash(f'The password is updated! You can now try to login with new password.', 'success')
+        return redirect(url_for('login'))
+
+
+    return render_template('reset_token.html', title='Reset Password', form=form)
+
 
 from flask import jsonify
 @app.route("/api", methods=['GET'])
