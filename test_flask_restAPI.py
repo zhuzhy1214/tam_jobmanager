@@ -23,7 +23,7 @@ except Exception:
 url = 'http://127.0.0.1:5000/post'
 
 params = {
-    "text": "Post Example"
+    "text": "posts Example"
 }
 
 try:
