@@ -50,6 +50,8 @@ def logout():
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    if post.author != current_user:
+        abort(403)
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
