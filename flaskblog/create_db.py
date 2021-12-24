@@ -1,3 +1,12 @@
+from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = '8c46b963a8a8b4782352e4f5f7364a541bbdec21'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site1.db'
+
+db = SQLAlchemy(app)
+
 from datetime import datetime
 from flaskblog import db, login_manager
 from flask_login import UserMixin
@@ -53,13 +62,15 @@ class Job(db.Model):
     func_name = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.Text, nullable=False)
     date_requested = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.Text, nullable=False, default='Job In Queue')
-    log = db.Column(db.Text)
-    input_path = db.Column(db.String(200))
-    output_path = db.Column(db.String(200))
+    status = db.Column(db.Text, nullable=False, default='job in queue')
+    date_completed = db.Column(db.DateTime)
+    input_path = db.Column(db.String(100))
+    output_path = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"jobs('{self.func_name}', '{self.notes}', '{self.status}')"
 
 
+
+db.

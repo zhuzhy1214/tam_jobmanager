@@ -46,7 +46,7 @@ def update_post(post_id):
         return redirect(url_for('posts.view_post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
-        form.content.data= post.content
+        form.content.data = post.content
     return render_template('create_post.html', title='Update posts',
                            form=form, legend='Update posts'
                            )

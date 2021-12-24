@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+<!--            <small class="text-muted">{{ current_user.username }}</small>-->
+            <h2 class="aritile-title">{{ job.func_name }}</h2>
+            <small class="text-muted">{{ (job.date_requested+utc_offset).strftime('%Y-%m-%d %H:%M')}}</small>
+            <p class="article-content">{{ job.status }}</p>
+            <p class="article-content">{{ job.notes }}</p>
+        </div>
+
+          <div>
+
+            {% if job.status.upper() == 'Job In Queue'.upper()  %}
+            <div>
+                <button type="button" class='btn btn-danger btn-sm m-1' data-toggle="modal" data-target="#deleteModal">Cancel</button>
+            </div>
+            {% endif %}
+
+            {% if job.status == 'Completed' %}
+            <div>
+                 <h3><a class="article-title" href="{{ url_for('jobs.download_file', job_id=job.id) }}">Download Result</a></h3>
+            </div>
+            {% endif %}
+
+          </div>
+
+      </div>
+    </article>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Cancel Job?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('jobs.cancel_job', job_id=job.id) }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Cancel">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}

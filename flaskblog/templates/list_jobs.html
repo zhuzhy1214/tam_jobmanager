@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1 class="mb-3"  >Total number of jobs: ({{jobs.total}})</a></h1>
+    {% for job in jobs.items %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h3><a class="article-title" href="{{ url_for('jobs.update_job', job_id=job.id) }}">Job Function Name: {{ job.func_name }}</a></h3>
+              <p class="article-content">Date Requested: {{ (job.date_requested+utc_offset).strftime('%Y-%m-%d %H:%M')}}</p>
+              <p class="article-content">Job Status: {{ job.status }}</p>
+              <p class="article-content">Job Notes: {{ job.notes }}</p>
+          </div>
+        </article>
+    {% endfor %}
+
+    {% for page_num in jobs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if page_num == jobs.page %}
+                <a class="btn btn-info" href=" {{ url_for('jobs.list_jobs', page=page_num) }} " >{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info" href=" {{ url_for('jobs.list_jobs', page=page_num) }} " >{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock content %}
+

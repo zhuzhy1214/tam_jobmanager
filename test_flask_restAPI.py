@@ -8,6 +8,20 @@ import sys
 url = 'http://localhost:5000'
 
 
+# https://stackoverflow.com/questions/47679227/using-python-to-send-json-and-files-to-flask
+
+
+
+
+
+
+
+
+
+
+
+
+
 params = {
     'ID':1,
     'PMstring': 'ALA_101_35.38R'
@@ -38,6 +52,13 @@ except Exception:
     e = sys.exc_info()[1]
     print(e.args[0])
 
+try:
+    response = requests.get(url+'/taskmanager/2')
+    response_data = response.json()
+    print(response_data)
+except Exception:
+    e = sys.exc_info()[1]
+    print(e.args[0])
 
 # print('add first taskthe function with name pm_validation')
 # try:
