@@ -5,6 +5,8 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flaskblog.config import Config
 from flask_restful import Api
+from flask_jwt_extended import JWTManager
+
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -12,7 +14,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 mail = Mail()
-
+jwt = JWTManager()
 
 def creat_app(config_class=Config):
     """
@@ -26,6 +28,7 @@ def creat_app(config_class=Config):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    jwt.init_app(app)
     # api = Api(app)
 
     from flaskblog.users.routes import users

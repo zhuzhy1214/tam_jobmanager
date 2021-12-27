@@ -55,8 +55,8 @@ class Job(db.Model):
     date_requested = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status = db.Column(db.Text, nullable=False, default='Job In Queue')
     log = db.Column(db.Text)
-    input_path = db.Column(db.String(200))
-    output_path = db.Column(db.String(200))
+    input_file = db.Column(db.String(200))
+    output_file = db.Column(db.String(200))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):

@@ -9,4 +9,10 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    UPLOAD_FOLDER = '/data/uploads'
+    INPUTFILE_FOLDER = '/data/input'
+    OUTPUTFILE_FOLDER = '/data/output'
+    JWT_SECRET_KEY = "super-secret"
+
+
+
+

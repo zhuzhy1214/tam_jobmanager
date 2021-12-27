@@ -34,7 +34,7 @@ def run_sql(conn, input_sql):
 
 
 def main():
-    database = r".\site.db"
+    database = r".\flaskblog\site.db"
     sql_drop_job = ''' DROP TABLE IF EXISTS Job;'''
 
     sql_create_job = """ CREATE TABLE IF NOT EXISTS Job (
@@ -43,10 +43,10 @@ def main():
                                         notes text,
                                         status text NOT NULL,
                                         date_requested numeric NOT NULL,
-                                        input_path text, 
+                                        input_file text, 
                                         date_completed numeric, 
                                         log text,
-                                        output_path text,
+                                        output_file text,
                                         user_id integer NOT NULL,
 
                                         FOREIGN KEY (user_id) REFERENCES User(id)
