@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import request, Blueprint, abort, jsonify, json, current_app, send_from_directory
 from flaskblog import db
 from flaskblog.models import Job
@@ -19,92 +20,6 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#
-# def token_required(f):
-#     @wraps(f)
-#     def decorated(*args, **kwargs):
-#         token = None
-#
-#         if 'x-access-token' in request.headers:
-#             token = request.headers['x-access-token']
-#
-#         if not token:
-#             return jsonify({'message': 'Token is missing!'}), 401
-#
-#         try:
-#             data = jwt.decode(token, current_app.config['SECRET_KEY'])
-#             current_user = User.query.filter_by(public_id=data['public_id']).first()
-#         except:
-#             return jsonify({'message': 'Token is invalid!'}), 401
-#
-#         return f(current_user, *args, **kwargs)
-#
-#     return decorated
-
-# dict_func_description = {
-#     '1': 'this is first api description',
-#     'helloworld': 'this is second api description',
-#     'pm-validation': 'this is a post mile validation function'
-# }
-#
-#
-# tasks = {}
-#
-# def abort_if_job_id_not_exists(job_id):
-#
-#     if job_id not in tasks:
-#         abort(404, message='The task does not exists.')
-
-# @rest_api.route("/api", methods=['GET'])
-# def sample():
-#     return jsonify({'name': 'Jimit',
-#                     'address': 'India'})
-#
-# @rest_api.route('/pm-validate/<string:func>', methods=["POST", 'GET'])
-# def pm_validate(func):
-#     if func == 'describe':
-#         output = dict_func_description['pm-validation']
-#     elif func == 'submit' and request.method == "POST":
-#         # inputs = request.form['data']
-#         inputs = request.get_json()
-#         task_id = len(tasks) + 1
-#         tasks[task_id] = inputs
-#         output = {task_id: inputs}
-#     else:
-#         output = 'bad request'
-#
-#     return jsonify(output)
-#
-# @rest_api.route('/jm/finish/<int:job_id>', methods=['POST'])
-# def new_job(job_id):
-#     #TODO use AUTH0 to sub user credential
-#
-#
-#     posted_data = json.load(request.files['meta'])
-#     func_name = posted_data['func_name']
-#     notes = posted_data['notes']
-#     input_file = posted_data['func_name']
-#
-#     if 'file' not in request.files:
-#         input_file = 'no input file uploaded.'
-#     else:
-#         #TODO: check if the file type is allowed.
-#
-#         file = request.files['file']
-#         #upload file and get file_name
-#         filename = secure_filename(file.filename)
-#         input_filepath = os.path.join(current_app.config['INPUTFILE_FOLDER'], filename)
-#         file.save(input_filepath)
-#
-#     cur_job = Job(
-#         func_name=posted_data['func_name'],
-#         notes=posted_data['notes'],
-#         input_file = filename,
-#         sponsor=current_user
-#     )
-#     db.session.add(cur_job)
-#     db.session.commit()
-#     return ''
 
 @rest_api.route('/api/finish_job', methods=['POST'])
 @jwt_required()
@@ -153,8 +68,8 @@ def get_token():
 
     if username != "worker" or password != "pwd":
         return jsonify({"msg": "Bad username or password"}), 401
-
-    access_token = create_access_token(identity=username)
+    # access_token = create_access_token(identity=username)
+    access_token = create_access_token(identity=username, expires_delta=datetime.timedelta(days=30))
     return jsonify(access_token=access_token)
 
 
