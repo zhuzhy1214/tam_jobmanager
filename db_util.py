@@ -34,7 +34,7 @@ def run_sql(conn, input_sql):
 
 
 def main():
-    database = r".\flaskblog\site.db"
+    database = r".\jobmanager\site.db"
     sql_drop_job = ''' DROP TABLE IF EXISTS Job;'''
 
     sql_create_job = """ CREATE TABLE IF NOT EXISTS Job (
@@ -52,17 +52,20 @@ def main():
                                         FOREIGN KEY (user_id) REFERENCES User(id)
 
                                     ); """
+    sql_add_col_job = 'ALTER TABLE Job  ADD date_updated  numeric;'
 
     # create a database connection
     conn = create_connection(database)
 
     # create tables
     if conn is not None:
-        #delete job table
-        run_sql(conn, sql_drop_job)
-        # create job table
-        run_sql(conn, sql_create_job)
 
+
+        # #delete job table
+        # run_sql(conn, sql_drop_job)
+        # # create job table
+        # run_sql(conn, sql_create_job)
+        run_sql(conn, sql_add_col_job)
         # #add sample data to job
         # run_sql(conn, sql_add_data_job)
 

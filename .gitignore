@@ -1,6 +1,6 @@
 __pycache__/
 .idea/
-flaskblog/static/profile_pics/Thumbs.db
-flaskblog/site.db
-flaskblog/data
+jobmanager/static/profile_pics/Thumbs.db
+jobmanager/site.db
+jobmanager/data
 
