@@ -1,5 +1,6 @@
 __pycache__/
 .idea/
+jobmanager/static/profile_pics/
 jobmanager/static/profile_pics/Thumbs.db
 jobmanager/site.db
 jobmanager/data

@@ -67,13 +67,7 @@ class RequestResetForm(FlaskForm):
             raise ValidationError('The email does not exists. You need to register first.')
 
 class PasswordResetForm(FlaskForm):
-    #token
 
-    def validate_token(self, token):
-        pass
-
-    password = PasswordField('Password'
-                             ,validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password'
-                             ,validators=[DataRequired(), EqualTo('password')])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')

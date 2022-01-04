@@ -7,6 +7,8 @@ from flask_mail import Message
 
 
 
+
+
 def save_picture(form_picture):
     # create a random file name
     random_hex = secrets.token_hex(8)
@@ -21,10 +23,16 @@ def save_picture(form_picture):
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender='amhq@dot.ca.gov',
+    msg = Message('Password Reset Request for Job Manager',
+                  sender='hq_am_jobmanager@dot.ca.gov',
                   recipients=[user.email])
-    msg.body = '''To reset your password, visit the following link:{}
-    '''.format(url_for('reset_token', token=token, _external=True))
+    msg.body = '''Hi there, \n
+    You are receiving this email because someone submitted a request to reset password on HQ TAM Job Manager Site. 
+    Please ignore this email if you did not initiate the request. \n
+    To reset your password, please click the following link:\n
+    {}
+    '''.format(url_for('users.reset_token', token=token, _external=True))
+
+
     mail.send(msg)
 
