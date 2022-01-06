@@ -130,16 +130,3 @@ def update_job():
         return jsonify({"response": "error in writing to db."})
 
 
-@rest_api.route('/api/restart_job', methods=['POST'])
-@jwt_required()
-def restart_job():
-    expired_jobs = Job.query.filter(status='Calculation In Process')\
-        .filter(date_updated<(datetime.utcnow - timedelta(days=1)))\
-        .order_by(Job.date_requested.asc())
-
-    return jsonify({'expired jobs': expired_jobs})
-    if expired_jobs:
-        for expired_job in expired_jobs:
-            expired_job.status = 'Job In Queue'
-            print(expired_job.id)
-        db.session.commit()

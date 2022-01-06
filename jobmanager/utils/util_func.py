@@ -1,12 +1,13 @@
 
-from datetime import datetime
-import time
+from datetime import datetime, timedelta
 import os
 import secrets
-from PIL import Image
-from flask import url_for, current_app
-from jobmanager import mail
-from flask_mail import Message
+from jobmanager.models import Job
+from jobmanager import db
+
+#mark jobs that is checked out more than one day
+
+
 
 
 # def utc2local_offset():
@@ -24,3 +25,20 @@ def save_file(file, folder):
     file.save(file_path)
     return file_name
 
+def mark_expired_job():
+    print('Mark all jobs that are checked out for more than 24 hours...')
+    expired_jobs = Job.query.filter(status='Calculation In Process')\
+        .order_by(Job.date_requested.asc())
+    # print(len(expired_jobs))
+    #
+    # # .filter(date_updated < (datetime.utcnow - timedelta(days=1)))\
+    #
+    # try:
+    #     for expired_job in expired_jobs.items:
+    #         expired_job.status = 'Job Timed Out'
+    #         expired_job.log = 'This job was not finished within 24 hour processing window. Please double check the input and resubmit'
+    #         print(expired_job.id)
+    #     db.session.commit()
+    # except:
+    #     return False
+    # return True

@@ -42,7 +42,6 @@ def new_job():
                            form=form, legend='Submit New Job'
                            )
 
-
 @jobs.route("/jobs/list", methods=['GET'])
 @login_required
 def list_jobs():
@@ -51,7 +50,6 @@ def list_jobs():
     all_jobs = Job.query.filter_by(sponsor=current_user) \
         .order_by(Job.date_requested.desc()).paginate(page=page, per_page=5)
     return render_template('list_jobs.html', jobs=all_jobs, utc_offset=utc_offset)
-
 
 @jobs.route("/job/<int:job_id>/update", methods=['GET', 'POST'])
 @login_required
@@ -87,6 +85,7 @@ def cancel_job(job_id):
     flash('The job has been canceled!', 'success')
     return redirect(url_for('jobs.update_job', job_id=job_id))
 
+
 import mimetypes
 @jobs.route("/job/<int:job_id>/<string:file_type>/download", methods=['GET'])
 @login_required
@@ -109,3 +108,7 @@ def download_file(job_id, file_type):
 
     return send_from_directory(file_path, fn, as_attachment=True)
     # return send_file(file_path, as_attachment=True, mimetype=mime_type)
+
+
+def mark_elapsed_job():
+    print('Mark all jobs that are checked out for more than 24 hours...')

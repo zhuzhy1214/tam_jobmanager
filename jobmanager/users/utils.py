@@ -6,9 +6,6 @@ from jobmanager import mail
 from flask_mail import Message
 
 
-
-
-
 def save_picture(form_picture):
     # create a random file name
     random_hex = secrets.token_hex(8)
